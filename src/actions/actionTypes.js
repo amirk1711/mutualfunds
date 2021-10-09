@@ -1,0 +1,15 @@
+export const LOGIN_START = "LOGIN_START";
+export const LOGIN_FAILED = "LOGIN_FAILED";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+
+export const LOGOUT_START = "LOGOUT_START";
+export const LOGOUT_FAILED = "LOGOUT_FAILED";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+
+export const SIGNUP_START = "SIGNUP_START";
+export const SIGNUP_FAILED = "SIGNUP_FAILED";
+export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
+
+export const EDIT_USER_START = "EDIT_USER";
+export const EDIT_USER_SUCCESS = "EDIT_USER_SUCCESS";
+export const EDIT_USER_FAILED = "EDIT_USER_FAILED";

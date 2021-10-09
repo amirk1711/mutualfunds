@@ -55,6 +55,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Listing(props) {
 	const [list, setList] = useState([]);
+	const [totalFunds, setTotalFunds] = useState([]);
+	const [searchText, setSearchText] = useState("");
+	const [searchResults, setSearchResults] = useState([]);
 
 	useEffect(() => {
 		fetch("https://api.mfapi.in/mf", {
@@ -66,13 +69,34 @@ export default function Listing(props) {
 			})
 			.then((data) => {
 				console.log("data: ", data);
-                let l = [];
+				setTotalFunds(data);
+				let l = [];
 				for (let i = 0; i < 5; i++) {
 					l.push(data[Math.floor(Math.random() * 1001)]);
 				}
-                setList(l);
+				setList(l);
 			});
 	}, []);
+
+	useEffect(() => {
+		// fetch("https://api.mfapi.in/mf/")
+		console.log("search text", searchText);
+		let count = 0;
+		let temp = [];
+		for (let i = 0; i < totalFunds.length; i++) {
+			if (count >= 4) break;
+			if (totalFunds[i].schemeName.includes(searchText)) {
+				console.log("search item: ", totalFunds[i].schemeName);
+				temp.push(totalFunds[i].schemeName);
+				count++;
+			}
+		}
+		setSearchResults(temp);
+		console.log("search results", searchResults);
+        if(searchText == ""){
+            setSearchResults([]);
+        }
+	}, [searchText]);
 
 	const { isLoggedin } = props;
 
@@ -80,29 +104,13 @@ export default function Listing(props) {
 		return <Redirect to="/signup" />;
 	}
 
+	const handleSearch = () => {};
 	console.log("props in Listing: ", props);
 	const { user } = props;
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
 				<Toolbar>
-					<IconButton
-						size="large"
-						edge="start"
-						color="inherit"
-						aria-label="open drawer"
-						sx={{ mr: 2 }}
-					>
-						{/* <MenuIcon /> */}
-					</IconButton>
-					<Typography
-						variant="h6"
-						noWrap
-						component="div"
-						sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-					>
-						MUI
-					</Typography>
 					<Search>
 						<SearchIconWrapper>
 							<SearchIcon />
@@ -110,12 +118,29 @@ export default function Listing(props) {
 						<StyledInputBase
 							placeholder="Search…"
 							inputProps={{ "aria-label": "search" }}
+							onChange={(e) => setSearchText(e.target.value)}
 						/>
 					</Search>
-					<Button color="inherit">
+					<Button>
 						<Link to="/profile">{user.name}</Link>
 					</Button>
 				</Toolbar>
+				{searchResults.length > 0 && (
+					<div className="search-results">
+						<ul>
+							{searchResults.map((mflist) => {
+								console.log("mflist", mflist);
+								return (
+									<li className="search-results-row">
+										<Link to={`/profile`}>
+											<span>{mflist}</span>
+										</Link>
+									</li>
+								);
+							})}
+						</ul>
+					</div>
+				)}
 			</AppBar>
 
 			<div>

@@ -1,21 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-	LineChart,
-	Line,
-	CartesianGrid,
-	XAxis,
-	YAxis,
-	Tooltip,
-	Legend,
-	AreaChart,
-	Area,
-} from "recharts";
+import { Legend, XAxis, YAxis, Tooltip, AreaChart, Area } from "recharts";
 
 function Details(props) {
 	const { schemeCode } = props;
 	const [graphData, setGraphData] = useState([]);
-    const [metaData, setMetaData] = useState({});
-
+	const [metaData, setMetaData] = useState({});
+	console.log("screen width: ", window.screen.width);
 	useEffect(() => {
 		fetch(`https://api.mfapi.in/mf/${schemeCode}`, {
 			method: "GET",
@@ -27,16 +17,28 @@ function Details(props) {
 			.then((data) => {
 				console.log("data: ", data);
 				setGraphData(data.data);
-                setMetaData(data.meta);
-				// data.meta contains extra info
+				setMetaData(data.meta);
 			});
-	}, []);
+	}, [schemeCode]);
 
 	return (
-		<div>
+		<div classname="details-container">
+			<div className="mf-details">
+				<p className="mfd-text">Mutual Fund Details</p>
+			</div>
+			<div className="fund-details">
+				<p className="meta-titles">Fund House : </p>
+				<p className="meta-data">{metaData.fund_house}</p>
+				<p className="meta-titles">Scheme type: </p>
+				<p className="meta-data">{metaData.scheme_type}</p>
+				<p className="meta-titles">Scheme Name</p>
+				<p className="meta-data">{metaData.scheme_name}</p>
+			</div>
+			<p className="note-text">See below how NAV (Net Asset Value) changes with the time.</p>
 			<AreaChart
-				width={730}
-				height={250}
+				className="graph-container"
+				width={window.screen.width - 10}
+				height={260}
 				data={graphData}
 				margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
 			>
@@ -45,14 +47,11 @@ function Details(props) {
 						<stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
 						<stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
 					</linearGradient>
-					<linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-						<stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-						<stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-					</linearGradient>
 				</defs>
 				<XAxis dataKey="date" />
 				<YAxis />
 				<Tooltip />
+				<Legend verticalAlign="top" height={36} />
 				<Area
 					type="monotone"
 					dataKey="nav"
@@ -61,15 +60,6 @@ function Details(props) {
 					fill="url(#colorUv)"
 				/>
 			</AreaChart>{" "}
-
-            <div>
-                <p>Fund House : </p>
-                <p>{metaData.fund_house}</p>
-                <p>Scheme type: </p>
-                <p>{metaData.scheme_type}</p>
-                <p>Scheme Name</p>
-                <p>{metaData.scheme_name}</p>
-            </div>
 		</div>
 	);
 }

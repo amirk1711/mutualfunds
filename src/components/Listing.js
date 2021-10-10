@@ -3,12 +3,8 @@ import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-// import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from "@mui/icons-material/Search";
-import Button from "@mui/material/Button";
 import { Redirect, Link } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
@@ -86,16 +82,17 @@ export default function Listing(props) {
 		for (let i = 0; i < totalFunds.length; i++) {
 			if (count >= 4) break;
 			if (totalFunds[i].schemeName.includes(searchText)) {
-				console.log("search item: ", totalFunds[i].schemeName);
-				temp.push(totalFunds[i].schemeName);
+				console.log("search item: ", totalFunds[i]);
+				temp.push(totalFunds[i]);
 				count++;
 			}
 		}
+        console.log("temp: ", temp);
 		setSearchResults(temp);
 		console.log("search results", searchResults);
-        if(searchText == ""){
-            setSearchResults([]);
-        }
+		if (searchText === "") {
+			setSearchResults([]);
+		}
 	}, [searchText]);
 
 	const { isLoggedin } = props;
@@ -104,7 +101,6 @@ export default function Listing(props) {
 		return <Redirect to="/signup" />;
 	}
 
-	const handleSearch = () => {};
 	console.log("props in Listing: ", props);
 	const { user } = props;
 	return (
@@ -121,36 +117,40 @@ export default function Listing(props) {
 							onChange={(e) => setSearchText(e.target.value)}
 						/>
 					</Search>
-					<Button>
-						<Link to="/profile">{user.name}</Link>
-					</Button>
+					<button className="name-btn">
+						<Link to="/profile" className="name-link">
+							{user.name[0]}
+						</Link>
+					</button>
 				</Toolbar>
-				{searchResults.length > 0 && (
-					<div className="search-results">
-						<ul>
-							{searchResults.map((mflist) => {
-								console.log("mflist", mflist);
-								return (
-									<li className="search-results-row">
-										<Link to={`/profile`}>
-											<span>{mflist}</span>
-										</Link>
-									</li>
-								);
-							})}
-						</ul>
-					</div>
-				)}
 			</AppBar>
 
-			<div>
-				{console.log("lists inside", list)}
-				<div>
-					{list.map((l) => {
-                        // console.log('l===', l);
-						return <p><Link to={`/details/${l.schemeCode}`}>{l.schemeName}</Link></p>;
+			{searchResults.length > 0 && (
+				<div className="search-results">
+					{searchResults.map((mflist) => {
+						console.log("mflist", mflist);
+						return (
+							<p className="search-list-items">
+								<Link className="search-list-links" to={`/details/${mflist.schemeCode}`}>
+									<span>{mflist.schemeName}</span>
+								</Link>
+							</p>
+						);
 					})}
 				</div>
+			)}
+
+			<div className="list-container">
+				<h2 className="mf-heading">Mutual Funds</h2>
+				{list.map((l) => {
+					return (
+						<p className="list-items">
+							<Link className="list-links" to={`/details/${l.schemeCode}`}>
+								{l.schemeName}
+							</Link>
+						</p>
+					);
+				})}
 			</div>
 		</Box>
 	);

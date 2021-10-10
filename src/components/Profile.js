@@ -1,8 +1,4 @@
-import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import { deepOrange, deepPurple, grey } from "@mui/material/colors";
-import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
@@ -24,29 +20,36 @@ function Profile(props) {
 	}
 
 	const handleSave = () => {
-		// const {password, confirmPassword, name} = this.state;
-		// const { user } = this.props.auth;
-		// dispatch(editUser(name, password, confirmPassword));
 		dispatch(editUserStart());
 		dispatch(editUser(name, email, password, user.password, newPassword));
+        setEditMode(false);
 	};
 
 	return (
 		<div>
 			<Box
+				className="profile-bg"
 				sx={{
 					width: "100%",
-					maxWidth: 500,
 					padding: 3,
 					bgcolor: "primary.dark",
 				}}
 			>
-				<Avatar sx={{ bgcolor: deepOrange[600] }}>{user.name[0]}</Avatar>
+				<div className="avatar">{user.name[0]}</div>
 			</Box>
 
 			<div className="settings">
 				<div className="field">
-					<div classname="field-label">Email</div>
+					<div className="field-label">Name</div>
+					{editMode ? (
+						<input type="text" onChange={(e) => setName(e.target.value)} value={name} />
+					) : (
+						<div className="field-value">{user.name}</div>
+					)}
+				</div>
+
+				<div className="field">
+					<div className="field-label">Email</div>
 					{editMode ? (
 						<input
 							type="text"
@@ -54,22 +57,18 @@ function Profile(props) {
 							value={email}
 						/>
 					) : (
-						<div classname="field-value">{user.email}</div>
-					)}
-				</div>
-
-				<div className="field">
-					<div classname="field-label">Name</div>
-					{editMode ? (
-						<input type="text" onChange={(e) => setName(e.target.value)} value={name} />
-					) : (
-						<div classname="field-value">{user.name}</div>
+						<div className="field-value">{user.email}</div>
 					)}
 				</div>
 
 				{editMode && (
 					<div className="field">
-						<div classname="field-label">Your Password</div>
+						<div className="field-label">
+							Your Password 
+							<span style={{ fontSize: 16, color: "grey" }}>
+								 (Required)
+							</span>
+						</div>
 
 						<input type="password" onChange={(e) => setPassword(e.target.value)} />
 					</div>
@@ -77,9 +76,10 @@ function Profile(props) {
 
 				{editMode && (
 					<div className="field">
-						<div classname="field-label">
+						<div className="field-label">
 							New password
-							<span style={{ fontSize: 12, color: grey }}>
+							<br />
+							<span style={{ fontSize: 16, color: "grey" }}>
 								(Only if you want to change your password)
 							</span>
 						</div>
@@ -95,14 +95,14 @@ function Profile(props) {
 						</button>
 					) : (
 						<button className="button edit-btn" onClick={() => setEditMode(true)}>
-							Edit profile
+							Edit Profile
 						</button>
 					)}
 
 					{editMode && (
-						<div className="go-back" onClick={() => setEditMode(false)}>
-							Go back
-						</div>
+						<button className="button go-back-btn" onClick={() => setEditMode(false)}>
+							Go Back
+						</button>
 					)}
 				</div>
 			</div>

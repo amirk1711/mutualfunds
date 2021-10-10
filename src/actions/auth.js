@@ -53,7 +53,6 @@ export function signupSuccess(user) {
 }
 
 export function signup(name, email, password) {
-	console.log("signup input data in action signup: ", name, email, password);
 	return (dispatch) => {
 		let user = {
 			name: name,

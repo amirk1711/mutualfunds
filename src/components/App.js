@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { connect } from "react-redux";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import Listing from "./Listing";
@@ -10,11 +9,6 @@ import Details from "./Details";
 function App(props) {
 	const { isLoggedin } = props.auth;
 	const { auth } = props;
-	console.log("auth: ", auth);
-
-	useEffect(() => {
-		console.log("mounted");
-	}, []);
 
 	return (
 		<Router>
@@ -25,7 +19,6 @@ function App(props) {
 						exact
 						path="/"
 						render={(props) => {
-							console.log("Here");
 							return <Listing {...props} isLoggedin={isLoggedin} user={auth.user} />;
 						}}
 					/>
@@ -36,8 +29,7 @@ function App(props) {
 						exact
 						path="/details/:id"
 						render={(props) => {
-							console.log("props inside deetails: ", props);
-							return <Details schemeCode={props.match.params.id} />;
+							return <Details isLoggedin={isLoggedin} schemeCode={props.match.params.id} />;
 						}}
 					/>
 				</Switch>

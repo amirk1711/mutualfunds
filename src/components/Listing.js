@@ -18,7 +18,7 @@ const Search = styled("div")(({ theme }) => ({
 	width: "100%",
 	[theme.breakpoints.up("sm")]: {
 		marginLeft: theme.spacing(1),
-		width: "auto",
+		width: "100%",
 	},
 }));
 
@@ -60,11 +60,9 @@ export default function Listing(props) {
 			method: "GET",
 		})
 			.then((response) => {
-				console.log("response: ", response);
 				return response.json();
 			})
 			.then((data) => {
-				// console.log("data: ", data);
 				setTotalFunds(data);
 				let l = [];
 				for (let i = 0; i < 5; i++) {
@@ -75,40 +73,34 @@ export default function Listing(props) {
 	}, []);
 
 	useEffect(() => {
-		// fetch("https://api.mfapi.in/mf/")
-		console.log("search text", searchText);
 		let count = 0;
 		let temp = [];
 		for (let i = 0; i < totalFunds.length; i++) {
 			if (count >= 4) break;
 			if (totalFunds[i].schemeName.includes(searchText)) {
-				console.log("search item: ", totalFunds[i]);
 				temp.push(totalFunds[i]);
 				count++;
 			}
 		}
-        console.log("temp: ", temp);
+
 		setSearchResults(temp);
-		console.log("search results", searchResults);
 		if (searchText === "") {
 			setSearchResults([]);
 		}
 	}, [searchText]);
 
 	const { isLoggedin } = props;
-
 	if (!isLoggedin) {
 		return <Redirect to="/signup" />;
 	}
 
-	console.log("props in Listing: ", props);
 	const { user } = props;
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
 				<Toolbar>
 					<Search>
-						<SearchIconWrapper>
+						<SearchIconWrapper >
 							<SearchIcon />
 						</SearchIconWrapper>
 						<StyledInputBase
@@ -128,10 +120,12 @@ export default function Listing(props) {
 			{searchResults.length > 0 && (
 				<div className="search-results">
 					{searchResults.map((mflist) => {
-						console.log("mflist", mflist);
 						return (
 							<p className="search-list-items">
-								<Link className="search-list-links" to={`/details/${mflist.schemeCode}`}>
+								<Link
+									className="search-list-links"
+									to={`/details/${mflist.schemeCode}`}
+								>
 									<span>{mflist.schemeName}</span>
 								</Link>
 							</p>

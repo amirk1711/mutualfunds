@@ -36,21 +36,18 @@ const theme = createTheme();
 function SignUp(props) {
 	const dispatch = useDispatch();
 	const { isLoggedin } = props;
+
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
 		let name = data.get("name");
 		let email = data.get("email");
 		let password = data.get("password");
-		console.log({
-			email: data.get("email"),
-			password: data.get("password"),
-			name: data.get("name"),
-		});
 
 		dispatch(signupStart());
 		dispatch(signup(name, email, password));
 	};
+
 	if (isLoggedin) {
 		return <Redirect to="/" />;
 	}
@@ -76,7 +73,7 @@ function SignUp(props) {
 					</Typography>
 					<Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
 						<Grid container spacing={2}>
-							<Grid item xs={12} sm={6}>
+							<Grid item xs={12}>
 								<TextField
 									autoComplete="name"
 									name="name"

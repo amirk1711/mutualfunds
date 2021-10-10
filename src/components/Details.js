@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 import { Legend, XAxis, YAxis, Tooltip, AreaChart, Area } from "recharts";
+import { Redirect } from "react-router-dom";
 
 function Details(props) {
-	const { schemeCode } = props;
+	const { schemeCode, isLoggedin } = props;
 	const [graphData, setGraphData] = useState([]);
 	const [metaData, setMetaData] = useState({});
-	console.log("screen width: ", window.screen.width);
+
 	useEffect(() => {
 		fetch(`https://api.mfapi.in/mf/${schemeCode}`, {
 			method: "GET",
 		})
 			.then((response) => {
-				console.log("response: ", response);
 				return response.json();
 			})
 			.then((data) => {
-				console.log("data: ", data);
 				setGraphData(data.data);
 				setMetaData(data.meta);
 			});
 	}, [schemeCode]);
 
+	if (!isLoggedin) {
+		return <Redirect to="/signup" />;
+	}
 	return (
-		<div classname="details-container">
+		<div className="details-container">
 			<div className="mf-details">
 				<p className="mfd-text">Mutual Fund Details</p>
 			</div>

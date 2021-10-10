@@ -5,7 +5,6 @@ import { Redirect } from "react-router-dom";
 import { editUser, editUserStart } from "../actions/auth";
 
 function Profile(props) {
-	console.log("props in Profile", props);
 	const { user, isLoggedin } = props.auth;
 	const [name, setName] = useState(user.name);
 	const [email, setEmail] = useState(user.email);
@@ -22,7 +21,7 @@ function Profile(props) {
 	const handleSave = () => {
 		dispatch(editUserStart());
 		dispatch(editUser(name, email, password, user.password, newPassword));
-        setEditMode(false);
+		setEditMode(false);
 	};
 
 	return (
@@ -64,10 +63,8 @@ function Profile(props) {
 				{editMode && (
 					<div className="field">
 						<div className="field-label">
-							Your Password 
-							<span style={{ fontSize: 16, color: "grey" }}>
-								 (Required)
-							</span>
+							Your Password
+							<span style={{ fontSize: 16, color: "grey" }}>(Required)</span>
 						</div>
 
 						<input type="password" onChange={(e) => setPassword(e.target.value)} />

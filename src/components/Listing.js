@@ -68,7 +68,7 @@ export default function Listing(props) {
 				return response.json();
 			})
 			.then((data) => {
-				console.log("data: ", data);
+				// console.log("data: ", data);
 				setTotalFunds(data);
 				let l = [];
 				for (let i = 0; i < 5; i++) {
@@ -147,7 +147,8 @@ export default function Listing(props) {
 				{console.log("lists inside", list)}
 				<div>
 					{list.map((l) => {
-						return <p>{l.schemeName}</p>;
+                        // console.log('l===', l);
+						return <p><Link to={`/details/${l.schemeCode}`}>{l.schemeName}</Link></p>;
 					})}
 				</div>
 			</div>

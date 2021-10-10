@@ -5,6 +5,7 @@ import Listing from "./Listing";
 import Login from "./Login";
 import Signup from "./Signup";
 import Profile from "./Profile";
+import Details from "./Details";
 
 function App(props) {
 	const { isLoggedin } = props.auth;
@@ -15,17 +16,8 @@ function App(props) {
 		console.log("mounted");
 	}, []);
 
-	// useEffect(() => {
-	// 	console.log("isLoggedIn changed", isLoggedin);
-	// 	if (isLoggedin) {
-	// 		console.log("redirecting to home");
-	// 		// <Redirect to="/" />;
-	// 	}
-	// }, [isLoggedin]);
-
 	return (
 		<Router>
-			{console.log("running")}
 			<div>
 				{isLoggedin && <Redirect to="/" />}
 				<Switch>
@@ -37,21 +29,17 @@ function App(props) {
 							return <Listing {...props} isLoggedin={isLoggedin} user={auth.user} />;
 						}}
 					/>
-					<Route path="/login" component={Login} />
-					<Route path="/signup" component={Signup} />
-					<Route path="/profile" component={Profile} />
-					{/* private route : settings component is accessible only when user is logged in */}
-					{/* <PrivateRoute
-						path="/settings"
-						component={Settings}
-						isLoggedin={auth.isLoggedin}
+					<Route exact path="/login" component={Login} />
+					<Route exact path="/signup" component={Signup} />
+					<Route exact path="/profile" component={Profile} />
+					<Route
+						exact
+						path="/details/:id"
+						render={(props) => {
+							console.log("props inside deetails: ", props);
+							return <Details schemeCode={props.match.params.id} />;
+						}}
 					/>
-					<PrivateRoute
-						path="/user/:userId"
-						component={Profile}
-						isLoggedin={auth.isLoggedin}
-					/>
-					<Route component={Page404} /> */}
 				</Switch>
 			</div>
 		</Router>
@@ -61,7 +49,6 @@ function App(props) {
 function mapStateToProps(state) {
 	return {
 		auth: state.auth,
-		// suggestions: state.suggestions,
 	};
 }
 export default connect(mapStateToProps)(App);
